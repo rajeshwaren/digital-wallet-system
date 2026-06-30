@@ -17,44 +17,35 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class AdminService {
-        @Autowired
-private EmailService emailService;
+    // @Autowired
+    // private EmailService emailService;
     @Autowired
     private UserRepository userRepository;
     @Autowired
     private TransactionRepository transactionRepository;
     @Autowired
-private WithdrawalRequestRepository
-        withdrawalRepository;
+    private WithdrawalRequestRepository withdrawalRepository;
     @Autowired
     private NotificationService notificationService;
 
     public List<User> getAllUsers() {
-
         return userRepository.findAll();
     }
     public List<Transaction> getAllTransactions() {
 
-    return transactionRepository.findAll();
-}
-public List<WithdrawalRequest>
-getWithdrawalRequests() {
+        return transactionRepository.findAll();
+    }
+    public List<WithdrawalRequest> getWithdrawalRequests() {
 
-    return withdrawalRepository.findAll();
-}
-@Transactional
-public void approveWithdrawal(
-        Long requestId) {
+       return withdrawalRepository.findAll();
+    }
+    @Transactional
+    public void approveWithdrawal(Long requestId) {
 
-    WithdrawalRequest request =
-            withdrawalRepository
-                    .findById(requestId)
-                    .orElseThrow();
+    WithdrawalRequest request =withdrawalRepository.findById(requestId).orElseThrow();
 
     User user = userRepository
-            .findByEmail(
-                    request.getUserEmail()
-            )
+            .findByEmail(request.getUserEmail())
             .orElseThrow();
 
     user.setBalance(
@@ -65,7 +56,7 @@ public void approveWithdrawal(
     );
 
     request.setStatus("APPROVED");
-    
+
     userRepository.save(user);
 
     withdrawalRepository.save(request);
@@ -73,10 +64,10 @@ public void approveWithdrawal(
         request.getUserEmail(),
         "Withdrawal Approved"
         
-);
+    );
 
-}
-public void rejectWithdrawal(
+    }
+    public void rejectWithdrawal(
         Long requestId) {
 
     WithdrawalRequest request =
@@ -90,10 +81,10 @@ public void rejectWithdrawal(
     notificationService.createNotification(
         request.getUserEmail(),
         "Withdrawal Rejected"
-);
-}
-@Transactional
-public void addMoney(
+    );
+    }
+    @Transactional
+    public void addMoney(
         String email,
         BigDecimal amount) {
 
@@ -144,29 +135,29 @@ public void addMoney(
     notificationService.createNotification(
         user.getEmail(),
         "Admin added ₹" + amount
-);
-}
-public void freezeUser(Long id) {
+    );
+    }
+    public void freezeUser(Long id) {
 
     User user =
             userRepository.findById(id)
                     .orElseThrow();
 
     user.setStatus("FROZEN");
-    emailService.sendEmail(
-        user.getEmail(),
-        "Account Frozen",
-        "Your Digital Wallet account has been frozen by an administrator."
-);
+    //     emailService.sendEmail(
+    //         user.getEmail(),
+    //         "Account Frozen",
+    //         "Your Digital Wallet account has been frozen by an administrator."
+    // );
 
     userRepository.save(user);
     notificationService.createNotification(
         user.getEmail(),
         "Account Frozen"
 
-);
-}
-public void unfreezeUser(Long id) {
+    );
+    }
+    public void unfreezeUser(Long id) {
 
     User user =
             userRepository.findById(id)
@@ -177,13 +168,13 @@ public void unfreezeUser(Long id) {
 
 
     userRepository.save(user);
-    emailService.sendEmail(
-        user.getEmail(),
-        "Account Activated",
-        "Your Digital Wallet account has been reactivated."
-);
-}
-public AdminStatsResponse getStats() {
+    // emailService.sendEmail(
+    //     user.getEmail(),
+    //     "Account Activated",
+    //     "Your Digital Wallet account has been reactivated."
+    // );
+    }
+    public AdminStatsResponse getStats() {
 
     long totalUsers =
             userRepository.count();
@@ -206,5 +197,5 @@ public AdminStatsResponse getStats() {
             totalTransactions,
             totalMoney
     );
-}
+    }
 }

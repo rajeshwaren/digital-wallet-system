@@ -18,7 +18,7 @@ public class AuthService {
     @Autowired
     private JwtService jwtService;
     @Autowired
-private EmailService emailService;
+    private EmailService emailService;
     public String register(RegisterRequest request) {
         if(userRepository.existsByEmail(request.getEmail())) {
             return "Email already exists";

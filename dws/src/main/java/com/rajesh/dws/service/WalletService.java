@@ -30,8 +30,8 @@ public class WalletService {
     private TransactionRepository transactionRepository;
     @Autowired
     private WithdrawalRequestRepository withdrawalRepository;
-    @Autowired
-private EmailService emailService;
+//     @Autowired
+// private EmailService emailService;
     public BigDecimal getBalance(String email) {
 
         User user = userRepository
@@ -135,13 +135,13 @@ public String requestWithdrawal(
     );
 
     withdrawalRepository.save(request);
-    emailService.sendEmail(
-        user.getEmail(),
-        "Withdrawal Request Submitted",
-        "Your withdrawal request for ₹" +
-        amount +
-        " has been submitted and is awaiting admin approval."
-);
+//     emailService.sendEmail(
+//         user.getEmail(),
+//         "Withdrawal Request Submitted",
+//         "Your withdrawal request for ₹" +
+//         amount +
+//         " has been submitted and is awaiting admin approval."
+// );
 
     return "Withdrawal Request Submitted";
 }
